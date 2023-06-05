@@ -62,7 +62,7 @@ void main()
 	{
 		struct process *head,*new,*temp,*prev,*min;
 		head=0;
-		int p,j;
+		int p,j,ch=0;
 		printf("\nEnter the number of processes: ");
 		scanf("%d",&p);
 		int pid[p],prio[p];
@@ -94,7 +94,6 @@ void main()
 			printf("| %2d\t\t|  %2.1f\t\t|  %2.1f\t\t|  %2d\t   |\n",pid[i],arr[i],burst[i],prio[i]);
 		}
 		printf("+---------------+---------------+---------------+----------+\n");
-//Sorting and Converting the data to Linked List
 		for(int i=0;i<p;i++)
 		{
 			new=(struct process *)malloc(sizeof(struct process));
@@ -136,10 +135,8 @@ void main()
 				}
 			}
 		}	
-//Accepting Input From User To Perform Operations
-		while(end!=5)
+		while(ch!=5)
 		{
-			int ch;
 			printf("\n1.Round Robin\n");
 			printf("2.SJF\n");
 			printf("3.FCFS\n");
@@ -151,6 +148,7 @@ void main()
 			if(ch==1)
 			{
 				float tq;
+				float error=0;
 				printf("Enter the time quantum for Round Robin: ");
 				scanf("%f",&tq);
 				printf("\n\t\t\tRound Robin\n");
@@ -168,6 +166,14 @@ void main()
 					}
 					else
 					{
+						if(temp->arr>error)
+						{
+							for(int i=error;i!=temp->arr;i++)
+							{
+								printf("--");
+							}
+							printf("+");
+						}
 						if(temp->avail>tq)
 						{
 							loop=tq;
@@ -183,6 +189,7 @@ void main()
 							printf("--");
 						}
 						printf("+");
+						error+=tq;
 						temp=temp->link;
 						j++;
 					}
@@ -192,6 +199,7 @@ void main()
 					}
 				}
 				reset(head);
+				error=0;
 				printf("\n|");
 				temp=head;
 				j=p;
@@ -205,6 +213,19 @@ void main()
 					}
 					else
 					{
+						if(temp->arr>error)
+						{
+							for(int i=error;i!=temp->arr-1;i++)
+							{
+								printf(" ");
+							}
+							printf("--");
+							for(int i=error;i!=temp->arr-1;i++)
+							{
+								printf(" ");
+							}
+							printf("|");
+						}
 						if(temp->avail>tq)
 						{
 							loop=tq;
@@ -225,6 +246,7 @@ void main()
 							printf(" ");
 						}
 						printf("|");
+						error+=tq;
 						temp=temp->link;
 						j++;
 					}
@@ -234,6 +256,7 @@ void main()
 					}
 				}
 				reset(head);
+				error=0;
 				temp=head;
 				printf("\n+");
 				j=p;
@@ -247,6 +270,14 @@ void main()
 					}
 					else
 					{
+						if(temp->arr>error)
+						{
+							for(int i=error;i!=temp->arr;i++)
+							{
+								printf("--");
+							}
+							printf("+");
+						}
 						if(temp->avail>tq)
 						{
 							loop=tq;
@@ -262,6 +293,7 @@ void main()
 							printf("--");
 						}
 						printf("+");
+						error+=tq;
 						temp=temp->link;
 						j++;
 					}
@@ -270,7 +302,6 @@ void main()
 						temp=head;
 					}
 				}
-				//Printing Timeline
 				reset(head);
 				printf("\n0");
 				temp=head;
@@ -279,6 +310,7 @@ void main()
 				while(j>0)
 				{
 					float loop;
+					float e;
 					if(temp->avail==0)
 					{
 						temp=temp->link;
@@ -286,6 +318,15 @@ void main()
 					}
 					else
 					{
+						if(temp->arr>time)
+						{
+							for(e=time;e!=temp->arr;e++)
+							{
+								printf("  ");
+							}
+							printf("%.1f",e);
+							time=time+e;
+						}
 						if(temp->avail>tq)
 						{
 							loop=tq;
@@ -353,6 +394,15 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(int i=time;i!=min->arr;i++)
+						{
+							printf("--");
+						}
+						printf("+");
+						time+=min->arr;
+					}
 					if(min->arr<=time)
 					{
 						for(int i=0;i<min->burst;i++)
@@ -392,6 +442,20 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(int i=time;i!=min->arr-1;i++)
+						{
+							printf(" ");
+						}
+						printf("--");
+						for(int i=time;i!=min->arr-1;i++)
+						{
+							printf(" ");
+						}
+						printf("|");
+						time=time+min->arr;
+					}
 					if(min->arr<=time)
 					{
 						for(int i=0;i<min->burst-1;i++)
@@ -436,6 +500,15 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(int i=time;i!=min->arr;i++)
+						{
+							printf("--");
+						}
+						printf("+");
+						time+=min->arr;
+					}
 					if(min->arr<=time)
 					{
 						for(int i=0;i<min->burst;i++)
@@ -452,6 +525,7 @@ void main()
 				printf("\n0");
 				j=p;
 				temp=head;
+				float e;
 				while(j>0)
 				{
 					temp=head;
@@ -475,6 +549,15 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(e=time;e!=min->arr;e++)
+						{
+							printf("  ");
+						}
+						printf("%.1f",e);
+						time=time+e;
+					}
 					if(min->arr<=time)
 					{
 						time=time+min->burst;
@@ -497,23 +580,47 @@ void main()
 			}
 			else if(ch==3)
 			{
+				float error=0;
 				printf("\n\t\t\tFCFS\n");
 				printf("\t\t\t\b\bGantt Chart\n");
 				temp=head;
 				printf("+");
 				while(temp!=0)
 				{
+					if(temp->arr>error)
+					{
+						for(int i=error;i!=temp->arr;i++)
+						{
+							printf("--");
+						}
+						printf("+");
+					}
 					for(int i=0;i<temp->burst;i++)
 					{
 						printf("--");
 					}
 					printf("+");
+					error+=temp->burst;
 					temp=temp->link;
 				}
+				error=0;
 				printf("\n|");
 				temp=head;
 				while(temp!=0)
 				{
+					if(temp->arr>error)
+					{
+						for(int i=error;i!=temp->arr-1;i++)
+						{
+							printf(" ");
+						}
+						printf("--");
+						for(int i=error;i!=temp->arr-1;i++)
+						{
+							printf(" ");
+						}
+						printf("|");
+					}
 					for(int i=0;i<temp->burst-1;i++)
 					{
 						printf(" ");
@@ -524,31 +631,50 @@ void main()
 						printf(" ");
 					}
 					printf("|");
+					error+=temp->burst;
 					temp=temp->link;
 				}
+				error=0;
 				printf("\n+");
 				temp=head;
 				while(temp!=0)
 				{
+					if(temp->arr>error)
+					{
+						for(int i=error;i!=temp->arr;i++)
+						{
+							printf("--");
+						}
+						printf("+");
+					}
 					for(int i=0;i<temp->burst;i++)
 					{
 						printf("--");
 					}
 					printf("+");
+					error+=temp->burst;
 					temp=temp->link;
 				}
-				
-				//Printing Timeline
 				printf("\n0");
 				temp=head;
 				j=0;
+				float e;
 				time=0;
 				while(temp!=0)
 				{
+					float loop;
+					if(temp->arr>time)
+					{
+						for(e=time;e!=temp->arr;e++)
+						{
+							printf("  ");
+						}
+						printf("%.1f",e);
+						time=time+e;
+					}
 					time=time+temp->burst;
 					temp->turn=time-temp->arr;
 					temp->wait=temp->turn-temp->burst;
-					float loop;
 					if(temp->burst<=1)
 					{
 						loop=1;
@@ -602,6 +728,15 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(int i=time;i!=min->arr;i++)
+						{
+							printf("--");
+						}
+						printf("+");
+						time+=min->arr;
+					}
 					if(min->arr<=time)
 					{
 						for(int i=0;i<min->burst;i++)
@@ -641,6 +776,20 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(int i=time;i!=min->arr-1;i++)
+						{
+							printf(" ");
+						}
+						printf("--");
+						for(int i=time;i!=min->arr-1;i++)
+						{
+							printf(" ");
+						}
+						printf("|");
+						time=time+min->arr;
+					}
 					if(min->arr<=time)
 					{
 						for(int i=0;i<min->burst-1;i++)
@@ -685,6 +834,15 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(int i=time;i!=min->arr;i++)
+						{
+							printf("--");
+						}
+						printf("+");
+						time+=min->arr;
+					}
 					if(min->arr<=time)
 					{
 						for(int i=0;i<min->burst;i++)
@@ -701,6 +859,7 @@ void main()
 				printf("\n0");
 				j=p;
 				temp=head;
+				float e;
 				while(j>0)
 				{
 					temp=head;
@@ -724,6 +883,15 @@ void main()
 					}
 					temp=min;
 					temp->avail=0;
+					if(min->arr>time)
+					{
+						for(e=time;e!=min->arr;e++)
+						{
+							printf("  ");
+						}
+						printf("%.1f",e);
+						time=time+e;
+					}
 					if(min->arr<=time)
 					{
 						time=time+min->burst;
